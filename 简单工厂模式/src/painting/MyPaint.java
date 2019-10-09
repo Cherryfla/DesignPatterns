@@ -4,10 +4,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -71,7 +68,7 @@ public class MyPaint extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 drawingArea.clear();
-                choices = 1;
+                choices = 4;
             }
         });
 
@@ -112,7 +109,7 @@ public class MyPaint extends JFrame {
  * @description 画图面板类，提供鼠标监听器
  *
  */
-class DrawPanel extends JPanel implements MouseListener {
+class DrawPanel extends JPanel implements MouseListener, MouseMotionListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -120,7 +117,6 @@ class DrawPanel extends JPanel implements MouseListener {
     private Vector<Shape> shapes;
 
     public void clear() {
-        shapes.clear();
         repaint();
     }
     // 用于记录鼠标画图时留下的两个点的坐标
@@ -131,6 +127,7 @@ class DrawPanel extends JPanel implements MouseListener {
         shapes = new Vector<>();
         setBackground(Color.white);
         this.addMouseListener(this);
+        this.addMouseMotionListener(this);
     }
 
 
@@ -138,12 +135,31 @@ class DrawPanel extends JPanel implements MouseListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (int i = 0; i < shapes.size(); i++) {
+            Shape tmp =  shapes.elementAt(i);
+            if (tmp.getColor() == 0)
+                g.setColor(Color.white);
+            else
+                g.setColor(Color.black);
             draw(g, shapes.elementAt(i));
         }
     }
     void draw(Graphics g, Shape shape) {
         shape.draw(g);
     }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        if (MyPaint.choices == 4) {
+            int x = e.getX();
+            int y = e.getY();
+            shapes.add(ShapeFactory.creator(MyPaint.choices, new Point(x - 2, y - 2), new Point(x + 2, y + 2)));
+            repaint();
+        }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {}
+
     @Override
     public void mouseClicked(MouseEvent e) {}
 
@@ -165,9 +181,10 @@ class DrawPanel extends JPanel implements MouseListener {
     public void mouseReleased(MouseEvent e) {
         ex = e.getX();
         ey = e.getY();
-        shapes.add(ShapeFactory.creator(MyPaint.choices, new Point(sx,sy), new Point(ex,ey)));
-
-        repaint();
+        if(MyPaint.choices <= 3) {
+            shapes.add(ShapeFactory.creator(MyPaint.choices, new Point(sx, sy), new Point(ex, ey)));
+            repaint();
+        }
     }
 
 }

@@ -8,9 +8,10 @@ public class Rectangle extends Shape {
    private Point start;
    private Point end;
 
-   public Rectangle(Point start, Point end) {
+   public Rectangle(Point start, Point end, int color) {
        this.start = start;
        this.end = end;
+       this.color = color;
    }
 
    @Override

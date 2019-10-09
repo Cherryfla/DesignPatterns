@@ -7,9 +7,10 @@ public class Circle extends Shape {
     private Point start;
     private Point end;
 
-    public Circle(Point start, Point end) {
+    public Circle(Point start, Point end, int color) {
         this.start = start;
         this.end = end;
+        this.color = color;
     }
 
     @Override
