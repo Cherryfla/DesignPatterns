@@ -63,11 +63,11 @@ public class MyPaint extends JFrame {
                 choices = 3;
             }});
         //添加擦除按钮以及点击事件
-        clear = new JButton("clear");
+        clear = new JButton("eraser");
         clear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawingArea.clear();
+                repaint();
                 choices = 4;
             }
         });
@@ -116,9 +116,6 @@ class DrawPanel extends JPanel implements MouseListener, MouseMotionListener {
     // 用于保存图形
     private Vector<Shape> shapes;
 
-    public void clear() {
-        repaint();
-    }
     // 用于记录鼠标画图时留下的两个点的坐标
 
     private int sx,sy,ex,ey;
@@ -136,10 +133,6 @@ class DrawPanel extends JPanel implements MouseListener, MouseMotionListener {
         super.paintComponent(g);
         for (int i = 0; i < shapes.size(); i++) {
             Shape tmp =  shapes.elementAt(i);
-            if (tmp.getColor() == 0)
-                g.setColor(Color.white);
-            else
-                g.setColor(Color.black);
             draw(g, shapes.elementAt(i));
         }
     }

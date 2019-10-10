@@ -1,11 +1,14 @@
 package painting;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public abstract class Shape {
-    protected int color;
+
+    protected Color myColor;
+
+    protected void setColor(Graphics g) {
+        g.setColor(myColor);
+    }
+
     abstract void draw(Graphics g);
-    int getColor(){
-        return color;
-    };
 }
